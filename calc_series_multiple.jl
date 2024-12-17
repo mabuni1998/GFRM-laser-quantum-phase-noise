@@ -87,7 +87,7 @@ fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.plot(result_out["out_times"][1:1000],real.(exp.(im .* result_out["out_series"][1:1000])))
 xlabel("Time")
 ylabel("Outcoupled Field")
-savefig("outcoupled_field.pdf")
+savefig("outcoupled_field.jpg")
 #Similarly, the duration of each event is stored in result_out["out_decay"]
 
 #We choose an appropiate frequency range. We here choose 10 times the schawlow-townes linewidth
@@ -115,7 +115,7 @@ ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
 xlabel("Frequency")
 ylabel("Spectrum")
 ax.legend()
-savefig("spec.pdf")
+savefig("spec.jpg")
 
 
 #If one wants only the averages. One can use just the gfrm solver. This is more efficient for sweeping over parameters.
@@ -132,7 +132,7 @@ end
 #Plot the number of photons
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.loglog(pump_rates,na_list)
-savefig("na_sweep.pdf")
+savefig("na_sweep.jpg")
 
 
 
@@ -161,4 +161,4 @@ ax.legend()
 xlabel("Frequency [GHz]")
 ylabel("RIN [dB/Hz]")
 plt.tight_layout()
-savefig("rin.pdf")
+savefig("rin.jpg")

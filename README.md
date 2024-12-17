@@ -4,9 +4,9 @@ See also \href{[https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.25
 
 # Installation
 
-Download repository and add the Stochastic module to the current environemnt with the command:
+Download repository and add the Stochastic module to the current environemnt with the command (press ] to get to package manager):
 ```julia
-] dev Stochastic//
+pkg> dev Stochastic//
 ```
 
 # Examples
@@ -128,9 +128,9 @@ fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.plot(result_out["out_times"][1:1000],real.(exp.(im .* result_out["out_series"][1:1000])))
 xlabel("Time")
 ylabel("Outcoupled Field")
-savefig("outcoupled_field.pdf")
+savefig("outcoupled_field.jpg")
 ```
-[outcoupledfield](outcoupled_field.pdf)
+[outcoupledfield](outcoupled_field.jpg?raw=true)
 
 The duration of each event is stored in `result_out["out_decay"]` and we can calculate the mean outcoupled duration as:
 
@@ -168,10 +168,10 @@ ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
 xlabel("Frequency")
 ylabel("Spectrum")
 ax.legend()
-savefig("spec.pdf")
+savefig("spec.jpg")
 ```
 
-[spec](spec.pdf)
+[spec](spec.jpg?raw=true)
 
 
 ## Population sweep
@@ -190,10 +190,10 @@ end
 #Plot the number of photons
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.loglog(pump_rates,na_list)
-savefig("na_sweep.pdf")
+savefig("na_sweep.jpg")
 ```
 
-[nas](na_sweep.pdf)
+[nas](na_sweep.jpg?raw=true)
 
 ## Calculate RIN
 Here, we provide the code necessary to calculate the intra and outer cavity RIN, which follows https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801 closely.
@@ -232,7 +232,7 @@ ax.legend()
 xlabel("Frequency [GHz]")
 ylabel("RIN [dB/Hz]")
 plt.tight_layout()
-savefig("rin.pdf")
+savefig("rin.jpg")
 ```
 
-[rin](rin.pdf)
+[rin](rin.jpg?raw=true)
