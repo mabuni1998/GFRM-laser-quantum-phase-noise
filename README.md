@@ -129,9 +129,8 @@ ax.plot(result_out["out_times"][1:100],real.(exp.(im .* result_out["out_series"]
 ax.set_xlabel("Time")
 ax.set_ylabel("Outcoupled Field")
 plt.tight_layout()
-savefig("outcoupled_field.jpg")
 ```
-![outcoupledfield](outcoupled_field.jpg?raw=true)
+![outcoupledfield](./plots/outcoupled_field.jpg?raw=true)
 
 The duration of each event is stored in `result_out["out_decay"]` and we can calculate the mean outcoupled duration as:
 
@@ -165,10 +164,9 @@ ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
 ax.set_xlabel("Frequency")
 ax.set_ylabel("Spectrum")
 ax.legend()
-savefig("spec.jpg")
 ```
 
-![spec](spec.jpg?raw=true)
+![spec](./plots/spec.jpg?raw=true)
 
 
 ## Population sweep
@@ -190,10 +188,9 @@ ax.loglog(pump_rates,na_list)
 ax.set_xlabel("Pump rate")
 ax.set_ylabel("Number of photons")
 plt.tight_layout()
-savefig("na_sweep.jpg")
 ```
 
-![nas](na_sweep.jpg?raw=true)
+![nas](./plots/na_sweep.jpg?raw=true)
 
 ## Calculate RIN
 Here, we provide the code necessary to calculate the intra and outer cavity RIN, which follows https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801 closely.
@@ -234,7 +231,6 @@ ax.legend()
 xlabel("Frequency [GHz]")
 ylabel("RIN [dB/Hz]")
 plt.tight_layout()
-savefig("rin.jpg")
 ```
 
-![rin](rin.jpg?raw=true)
+![rin](./plots/rin.jpg?raw=true)

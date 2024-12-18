@@ -88,7 +88,7 @@ ax.plot(result_out["out_times"][1:1000],real.(exp.(im .* result_out["out_series"
 ax.set_xlabel("Time")
 ax.set_ylabel("Outcoupled Field")
 plt.tight_layout()
-savefig("outcoupled_field.jpg")
+savefig("./plots/outcoupled_field.jpg")
 #Similarly, the duration of each event is stored in result_out["out_decay"]
 
 #We choose an appropiate frequency range. We here choose 10 times the schawlow-townes linewidth
@@ -117,7 +117,7 @@ ax.set_xlabel("Frequency")
 ax.set_ylabel("Spectrum")
 ax.legend()
 plt.tight_layout()
-savefig("spec.jpg")
+savefig("./plots/spec.jpg")
 
 
 #If one wants only the averages. One can use just the gfrm solver. This is more efficient for sweeping over parameters.
@@ -137,7 +137,7 @@ ax.loglog(pump_rates,na_list)
 ax.set_xlabel("Pump rate")
 ax.set_ylabel("Number of photons")
 plt.tight_layout()
-savefig("na_sweep.jpg")
+savefig("./plots/na_sweep.jpg")
 
 
 
@@ -166,4 +166,4 @@ ax.legend()
 xlabel("Frequency [GHz]")
 ylabel("RIN [dB/Hz]")
 plt.tight_layout()
-savefig("rin.jpg")
+savefig("./plots/rin.jpg")
