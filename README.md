@@ -8,7 +8,7 @@ Download repository and add the Stochastic module to the current environemnt wit
 ```julia
 pkg> dev Stochastic//
 ```
-
+\
 # Examples
 In the following, we show showcase different functionalities of the code, which are necessary to reproduce the results in REFERENCE. 
 
@@ -32,7 +32,7 @@ gamma_r = 4*g^2 ./ (kappa+gamma_A+gamma_D + P)
 params = [P,gamma_r,kappa,gamma_A,n0,alpha]
 ```
 
-In the code, one defines the different events and their effect on the populations by giving a matrix `A`. The matrix should have dimensions (`rows` \\times `columns`) , where rows is the number of stochastic variables (here three: na, ne, and phi) and columns is the number of events (here 6).
+In the code, one defines the different events and their effect on the populations by giving a matrix `A`. The matrix should have dimensions (`rows` $\times$ `columns`) , where rows is the number of stochastic variables (here three: na, ne, and phi) and columns is the number of events (here 6).
 ```julia
 #Define the matrix A that defines the popultion changes for each event.
 A =[-1 -1  0  1  1  0; #Photon population change
