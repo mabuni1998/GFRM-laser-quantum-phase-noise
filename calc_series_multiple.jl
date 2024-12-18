@@ -85,8 +85,9 @@ using PyPlot
 pygui(true)
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.plot(result_out["out_times"][1:1000],real.(exp.(im .* result_out["out_series"][1:1000])))
-xlabel("Time")
-ylabel("Outcoupled Field")
+ax.set_xlabel("Time")
+ax.set_ylabel("Outcoupled Field")
+plt.tight_layout()
 savefig("outcoupled_field.jpg")
 #Similarly, the duration of each event is stored in result_out["out_decay"]
 
@@ -112,9 +113,10 @@ fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.plot(freq,spec_out ./ max(spec_out...),"r-",label="stoch fit")
 #Plot fit 
 ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
-xlabel("Frequency")
-ylabel("Spectrum")
+ax.set_xlabel("Frequency")
+ax.set_ylabel("Spectrum")
 ax.legend()
+plt.tight_layout()
 savefig("spec.jpg")
 
 
@@ -132,6 +134,9 @@ end
 #Plot the number of photons
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.loglog(pump_rates,na_list)
+ax.set_xlabel("Pump rate")
+ax.set_ylabel("Number of photons")
+plt.tight_layout()
 savefig("na_sweep.jpg")
 
 

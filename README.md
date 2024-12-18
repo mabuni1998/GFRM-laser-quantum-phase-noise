@@ -186,9 +186,10 @@ for (i,P) in enumerate(pump_rates)
 end
 #Plot the number of photons
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
+ax.loglog(pump_rates,na_list)
 ax.set_xlabel("Pump rate")
 ax.set_ylabel("Number of photons")
-ax.loglog(pump_rates,na_list)
+plt.tight_layout()
 savefig("na_sweep.jpg")
 ```
 
