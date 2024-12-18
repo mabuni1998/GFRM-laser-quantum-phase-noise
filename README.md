@@ -4,11 +4,17 @@ See also [https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801](
 
 # Installation
 
-Download repository and add the Stochastic module to the current environemnt with the command (press ] to get to package manager):
+Download the folder `Stochastic` and add the Stochastic module to the current environemnt with the command (press ] to get to package manager):
 ```julia
-pkg> dev Stochastic//
+pkg> add Stochastic\\
 ```
-\
+
+Subsequently the packaged is loaded by calling
+
+```julia
+using Stochastic
+```
+
 # Examples
 In the following, we show showcase different functionalities of the code, which are necessary to reproduce the results in REFERENCE. 
 
