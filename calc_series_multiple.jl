@@ -110,7 +110,7 @@ println(B)
 
 #Plot the spectrum
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
-ax.plot(freq,spec_out ./ max(spec_out...),"r-",label="stoch fit")
+ax.plot(freq,spec_out ./ max(spec_out...),"r-",label="Stochastic")
 #Plot fit 
 ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
 ax.set_xlabel("Frequency")
