@@ -4,27 +4,26 @@ See also [https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801](
 
 # Installation
 
-Download the folder `Stochastic` and add the Stochastic module to the current environemnt with the command (press ] to get to package manager):
+Download the folder `Stochastic` and add the Stochastic module to the current environment with the command (press ] to get to the package manager):
 ```julia
-pkg> add Stochastic\\
+pkg> dev Stochastic\\
 ```
 
-Subsequently the packaged is loaded by calling
-
+Subsequently, the package is loaded by calling.
 ```julia
 using Stochastic
 ```
 
 # Examples
-In the following, we show showcase different functionalities of the code, which are necessary to reproduce the results in REFERENCE. 
+In the following, we showcase different functionalities of the code, which are necessary to reproduce the results in REFERENCE. 
 
 ## Setup problem
-We first define the parameters. Here we consider only one particular pump rate, but by changing the index `i`, other pump rates can be investigated.
+We first define the parameters. Here, we consider only one particular pump rate, but by changing the index `i`, other pump rates can be investigated.
 ```julia
 using Stochastic
 using Statistics
 
-#Define parameters (same as fig. 2 in main text of paper)
+#Define parameters (same as fig. 2 in the main text of paper)
 g,kappa,gamma_A,gamma_D,n0,alpha = 0.1,0.04,0.0012,1,5,0
 
 #Define the pump rates and choose one by index i
@@ -38,17 +37,17 @@ gamma_r = 4*g^2 ./ (kappa+gamma_A+gamma_D + P)
 params = [P,gamma_r,kappa,gamma_A,n0,alpha]
 ```
 
-In the code, one defines the different events and their effect on the populations by giving a matrix `A`. The matrix should have dimensions (`rows` $\times$ `columns`) , where rows is the number of stochastic variables (here three: na, ne, and phi) and columns is the number of events (here 6).
+In the code, one defines the different events and their effect on the populations by giving a matrix `A`. The matrix should have dimensions (`rows` $\times$ `columns`), where `rows` is the number of stochastic variables (here three: na, ne, and phi) and `columns` is the number of events (here 6).
 ```julia
-#Define the matrix A that defines the popultion changes for each event.
+#Define matrix A, which defines the population changes for each event.
 A =[-1 -1  0  1  1  0; #Photon population change
      0  1 -1 -1 -1  1; #Emitter population change
      0  0  0  0  0  0]; #Phase population is unchanged
 ```
 
-Then a function the gives the the rates at each timestep should be defined. Here, `a` is a vector of length `columns` that contains the rates, `N` is a vector of length `rows` containing the stochastic variables, and params are any parameters necessary for the simulation.
+Then, a function that gives the rates at each timestep should be defined. Here, `a` is a vector of length `columns` that contains the rates, `N` is a vector of length `rows` containing the stochastic variables, and params are any parameters necessary for the simulation.
 ```julia
-#Define how the 6 rates are updated (see eq. 1 and 2 in main text of paper)
+#Define how the six rates are updated (see eq. 1 and 2 in the main text of the paper)
 function update_rates!(a,N,params)
     P,gamma_r,kappa,gamma_A,n0,alpha = params
 
@@ -62,9 +61,9 @@ function update_rates!(a,N,params)
 end
 ```
 
-We then provide a function that updates the population (this function is run at each timestep). `k`, here denotes which event (index of column) that happened and the population is changed according to that. Note that `N[end]`, which is the phase phi, is changed only if `k==5`. All other variables (na and ne) are changed according to `A` (notice the loop over the rows of `A` at the column index `k`)
+We then provide a function that updates the population (this function is run at each timestep). `k` here denotes which event (index of column) happened, and the population is changed according to that. Note that `N[end],` which is the phase phi, is changed only if `k==5`. All other variables (na and ne) are changed according to `A` (notice the loop over the rows of `A` at the column index `k`)
 ```julia
-#Define how the population is updated. Here we also add the phase noise if k==5 (spontanoues decay)
+#Define how the population is updated. Here, we also add the phase noise if k==5 (spontaneous decay)
 function update_population!(N,A,k,dt,params)
     if k==5
         if N[1] == 0
@@ -92,10 +91,10 @@ Combining all of this, we can define a stochastic rate equation problem:
 prob = StochasticRateEquation(A,params,update_rates!,update_population!)    
 ```
 
-## Getting outcoupled field and calculate spectrum
-When solving the problem, we can provide an output function that specifies which events should be recorded as outcoupled events (here `k=1` as it corresponds to a cavity decay event):
+## Getting outcoupled field and calculating spectrum
+When solving the problem, we can provide an output function that specifies which events should be recorded as outcoupled events (here, `k=1` as it corresponds to a cavity decay event):
 ```julia
-#Define the output function. Here we output the phase of the cavity field if k==1 (cavity decay event)
+#Define the output function. Here, we output the phase of the cavity field if k==1 (cavity decay event)
 function fout(N,k)
     if k==1
         N[end],true
@@ -107,27 +106,27 @@ end
 
 We then solve the problem using Gillespies First Reaction Method (GFRM) and specify that we want 1 million outcoupling events defined by `fout`:
 ```julia
-#Solve the problem and output the result. Here we require 1_000_000 outcoupling events.
+#Solve the problem and output the result. Here, we require 1_000_000 outcoupling events.
 result_out = gfrm_out(prob,1_000_000,fout)
 ```
 
-From the solution we can extract first and second order statistical moments:
+From the solution, we can extract first and second-order statistical moments:
 ```julia
-#First order moments of the stochastic variables (na,ne and phi) are stored in result_out["averages"][1:3]
+# First-order moments of the stochastic variables (na,ne, and phi) are stored in result_out["averages"][1:3]
 pops = result_out["averages"]
 na = pops[1]
 ne = pops[2]
 phi_avg = pops[3]
 
 #Second order moments (<na^2>,<ne^2> and <phi^2>) are stored in pops[4:6]
-#We calculate the second order correlation function g2
+#We calculate the second-order correlation function g2
 g2 = (pops[4] - pops[1])/pops[1]^2
 ```
 
 We can also see the outcoupled electric field as a function of time:
 
 ```julia
-#The outcoupled series (phase at each outcoupling event) is stored in result_out["out_series"] and the corresponding times in result_out["out_times"]
+#The outcoupled series (phase at each outcoupling event) is stored in result_out["out_series"], and the corresponding times in result_out["out_times"]
 using PyPlot
 pygui(true)
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
@@ -138,16 +137,16 @@ plt.tight_layout()
 ```
 ![outcoupledfield](./plots/outcoupled_field.jpg?raw=true)
 
-The duration of each event is stored in `result_out["out_decay"]` and we can calculate the mean outcoupled duration as:
+The duration of each event is stored in `result_out["out_decay"],` and we can calculate the mean outcoupled duration as:
 
 ```julia
 julia> mean(result_out["out_decay"])
 4.407
 ```
 
-For the actual spectrum and linewidth we specify the appropiate frequency range and calculate the emission spectrum assuming each pulse to have length of `mean(result_out["out_decay"])`. We could have also input just  `result_out["out_decay"]` to get varying pulse durations.:
+For the actual spectrum and linewidth, we specify the appropriate frequency range and calculate the emission spectrum, assuming each pulse has a length of `mean(result_out["out_decay"]).` We could have also input just  `result_out["out_decay"]` to get varying pulse durations (see out commented line).:
 ```julia 
-#We choose an appropiate frequency range. We here choose 10 times the schawlow-townes linewidth
+#We choose an appropriate frequency range. We here choose 10 times the Schawlow-Townes linewidth
 st_lw = (pops[2]) .* gamma_r ./ (2*pops[1])/(2*pi)
 freq = range(-10*st_lw,10*st_lw,length=201)
 
@@ -159,12 +158,12 @@ spec_out = calc_spec(result_out["out_times"],exp.(im .* result_out["out_series"]
 This gives the spectrum:
 
 ```julia
-#Extract the linewidth with a cumulative lorenzian fit
+#Extract the linewidth with a cumulative Lorenzian fit
 fit_x_c,_, B,fit_y_c = fit_lorr_cum(freq,spec_out,st_lw)
 
 #Plot the spectrum
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
-ax.plot(freq,spec_out ./ max(spec_out...),"r-",label="stoch fit")
+ax.plot(freq,spec_out ./ max(spec_out...),"r-",label="Stochastic")
 #Plot fit 
 ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
 ax.set_xlabel("Frequency")
@@ -176,8 +175,8 @@ ax.legend()
 
 
 ## Population sweep
-If one wants only the averages. One can use just the gfrm solver. This is more efficient for sweeping over parameters since a timeseries is not saved.
-Here we sweep over the pump rates and calculate the average number of photons in the cavity
+If one wants only the averages. One can use just the gfrm solver. This is more efficient for sweeping over parameters since a time series is not saved.
+Here, we sweep over the pump rates and calculate the average number of photons in the cavity
 ```julia
 
 na_list = zeros(length(pump_rates))
@@ -202,15 +201,15 @@ plt.tight_layout()
 Here, we provide the code necessary to calculate the intra and outer cavity RIN, which follows https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801 closely.
 
 
-If one wants the time series of the intra cavity field one can use the `gfrm_intra` solver
+If one wants the time series of the intra-cavity field, one can use the `gfrm_intra` solver
 
 ```julia
 result_in = gfrm_intra(prob,1_000_000)
 ```
 
-The interpolated intra cavity field and RIN is then:
+The interpolated intra-cavity field and RIN are then:
 ```julia
-#Interpolate the intra cavity field to a fixed time step
+#Interpolate the intra-cavity field to a fixed time step
 dt = 10.0
 photons_in = result_in["time_series"][1,:]
 photons_in_interpolated = interpolate_previous(result_in["times"],photons_in,dt)
