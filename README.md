@@ -1,6 +1,6 @@
 # GFRM laser quantum phase noise
 An implementation of Gillespies first reaction method for calculating quantum phase noise in laser rate equations used in REFERENCE PAPER.
-See also \href{[https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801)} for even more context.
+See also [https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801) for even more context.
 
 # Installation
 
@@ -13,7 +13,7 @@ pkg> dev Stochastic//
 In the following, we show showcase different functionalities of the code, which are necessary to reproduce the results in REFERENCE. 
 
 ## Setup problem
-We first define the parameters. Here we consider only one particular pump rate, but by changing the index i, other pump rates can be investigated.
+We first define the parameters. Here we consider only one particular pump rate, but by changing the index `i`, other pump rates can be investigated.
 ```julia
 using Stochastic
 using Statistics
@@ -32,7 +32,7 @@ gamma_r = 4*g^2 ./ (kappa+gamma_A+gamma_D + P)
 params = [P,gamma_r,kappa,gamma_A,n0,alpha]
 ```
 
-In the code, one defines the different events and their effect on the populations by giving a matrix A. The matrix should have dimensions (rows x columns), where rows is the number of stochastic variables (here three: na, ne, and phi) and columns is the number of events (here 6).
+In the code, one defines the different events and their effect on the populations by giving a matrix `A`. The matrix should have dimensions (`rows` \\times `columns`) , where rows is the number of stochastic variables (here three: na, ne, and phi) and columns is the number of events (here 6).
 ```julia
 #Define the matrix A that defines the popultion changes for each event.
 A =[-1 -1  0  1  1  0; #Photon population change
@@ -40,7 +40,7 @@ A =[-1 -1  0  1  1  0; #Photon population change
      0  0  0  0  0  0]; #Phase population is unchanged
 ```
 
-Then a function the gives the the rates at each timestep should be defined. Here, a is a vector with length columns that contains the rates, N is a vector of length rows containing the stochastic variables, and params are any parameters necessary for the simulation.
+Then a function the gives the the rates at each timestep should be defined. Here, `a` is a vector of length `columns` that contains the rates, `N` is a vector of length `rows` containing the stochastic variables, and params are any parameters necessary for the simulation.
 ```julia
 #Define how the 6 rates are updated (see eq. 1 and 2 in main text of paper)
 function update_rates!(a,N,params)
@@ -56,7 +56,7 @@ function update_rates!(a,N,params)
 end
 ```
 
-We then provide a function that updates the population (this function is run at each timestep). k, here denotes which event (index of column) that happened and the population is changed according to that. Note that N[end] which is the phase is changed only if k==5. All other variables (na and ne) are changed according to A (notice the loop over the rows of A at the column index k)
+We then provide a function that updates the population (this function is run at each timestep). `k`, here denotes which event (index of column) that happened and the population is changed according to that. Note that `N[end]`, which is the phase phi, is changed only if `k==5`. All other variables (na and ne) are changed according to `A` (notice the loop over the rows of `A` at the column index `k`)
 ```julia
 #Define how the population is updated. Here we also add the phase noise if k==5 (spontanoues decay)
 function update_population!(N,A,k,dt,params)
@@ -87,7 +87,7 @@ prob = StochasticRateEquation(A,params,update_rates!,update_population!)
 ```
 
 ## Getting outcoupled field and calculate spectrum
-When solving the problem, we can provide an output function that specifies which events should be recorded as outcoupled events (here k=1 as it corresponds to a cavity decay event):
+When solving the problem, we can provide an output function that specifies which events should be recorded as outcoupled events (here `k=1` as it corresponds to a cavity decay event):
 ```julia
 #Define the output function. Here we output the phase of the cavity field if k==1 (cavity decay event)
 function fout(N,k)
@@ -125,9 +125,10 @@ We can also see the outcoupled electric field as a function of time:
 using PyPlot
 pygui(true)
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
-ax.plot(result_out["out_times"][1:1000],real.(exp.(im .* result_out["out_series"][1:1000])))
-xlabel("Time")
-ylabel("Outcoupled Field")
+ax.plot(result_out["out_times"][1:100],real.(exp.(im .* result_out["out_series"][1:100])))
+ax.set_xlabel("Time")
+ax.set_ylabel("Outcoupled Field")
+plt.tight_layout()
 savefig("outcoupled_field.jpg")
 ```
 [outcoupledfield](outcoupled_field.jpg?raw=true)
@@ -146,7 +147,6 @@ st_lw = (pops[2]) .* gamma_r ./ (2*pops[1])/(2*pi)
 freq = range(-10*st_lw,10*st_lw,length=201)
 
 spec_out = calc_spec(result_out["out_times"],exp.(im .* result_out["out_series"]),mean(result_out["out_decay"]),freq;mode=:lor)
-
 #Equivalently one can assume variable durations of outcoupling events and use a sinc function to calculate the spectrum
 #spec_out = Stochastic.exponential_decay_fourier(result_out["out_times"],result_out["out_series"],result_out["out_decay"],freq;mode=:sinc)
 ```
@@ -157,20 +157,16 @@ This gives the spectrum:
 #Extract the linewidth with a cumulative lorenzian fit
 fit_x_c,_, B,fit_y_c = fit_lorr_cum(freq,spec_out,st_lw)
 
-println(B)
-
-
 #Plot the spectrum
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
 ax.plot(freq,spec_out ./ max(spec_out...),"r-",label="stoch fit")
 #Plot fit 
 ax.plot(fit_x_c,fit_y_c ./ max(fit_y_c...),"bo",label="Fit")
-xlabel("Frequency")
-ylabel("Spectrum")
+ax.set_xlabel("Frequency")
+ax.set_ylabel("Spectrum")
 ax.legend()
 savefig("spec.jpg")
 ```
-
 [spec](spec.jpg?raw=true)
 
 
@@ -189,6 +185,8 @@ for (i,P) in enumerate(pump_rates)
 end
 #Plot the number of photons
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
+ax.set_xlabel("Pump rate")
+ax.set_ylabel("Number of photons")
 ax.loglog(pump_rates,na_list)
 savefig("na_sweep.jpg")
 ```
@@ -199,7 +197,7 @@ savefig("na_sweep.jpg")
 Here, we provide the code necessary to calculate the intra and outer cavity RIN, which follows https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801 closely.
 
 
-If one wants the time series of the intra cavity field one can use the gfrm_intra solver
+If one wants the time series of the intra cavity field one can use the `gfrm_intra` solver
 
 ```julia
 result_in = gfrm_intra(prob,1_000_000)
@@ -220,8 +218,10 @@ Similarly, the outer cavity RIN is given as:
 #The outcoupled RIN is similarly given (we have the outcoupled field from above and just need to interpolate it)
 photons_out_interpolated = interpolate_outcoupled(result_out["out_times"],abs.(exp.(im .* result_out["out_series"])),dt)
 rin_out,freq_rin_out = RIN(photons_out_interpolated,dt*1e-12,sum(photons_out_interpolated)/length(photons_out_interpolated);N = 10000)
+```
 
 Finally, we can plot them both together with the shot noise limit:
+
 ```julia
 #Plot the RIN
 fig,ax = subplots(1,1,figsize=(4.5,4.5))
