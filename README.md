@@ -1,5 +1,5 @@
 # GFRM laser quantum phase noise
-An implementation of Gillespies first reaction method for calculating quantum phase noise in laser rate equations used in REFERENCE PAPER.
+An implementation of Gillespies first reaction method for calculating quantum phase noise in laser rate equations used in [https://arxiv.org/abs/2412.14347](https://arxiv.org/abs/2412.14347).
 See also [https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.130.253801) for even more context.
 
 # Installation
