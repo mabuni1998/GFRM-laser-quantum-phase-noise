@@ -15,7 +15,7 @@ using Stochastic
 ```
 
 # Examples
-In the following, we showcase different functionalities of the code, which are necessary to reproduce the results in REFERENCE. 
+In the following, we showcase different functionalities of the code, which are necessary to reproduce the results in [https://arxiv.org/abs/2412.14347](https://arxiv.org/abs/2412.14347). 
 
 ## Setup problem
 We first define the parameters. Here, we consider only one particular pump rate, but by changing the index `i`, other pump rates can be investigated.
